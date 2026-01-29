@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurchCarpool - Ride Coordination for Churches</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f8f9fc;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #5B6BE6 0%, #7B5CD6 100%);
+            padding: 60px 24px 100px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 900px) {
+            .hero-content {
+                grid-template-columns: 1fr auto;
+                text-align: left;
+            }
+        }
+
+        .hero-text {
+            text-align: center;
+        }
+
+        @media (min-width: 900px) {
+            .hero-text {
+                text-align: left;
+            }
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: clamp(16px, 2.5vw, 19px);
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+
+        @media (min-width: 900px) {
+            .subtitle {
+                margin: 0 0 40px;
+            }
+        }
+
+        /* Email Form */
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 500px) {
+            .signup-form {
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .signup-form {
+                margin: 0;
+            }
+        }
+
+        .signup-form input {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .signup-form button {
+            padding: 16px 28px;
+            background: #FFB800;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .signup-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .form-note {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 12px;
+        }
+
+        /* Phone Mockup */
+        .phone-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 280px;
+            height: 580px;
+            background: #fff;
+            border-radius: 36px;
+            box-shadow: 
+                0 50px 100px rgba(0,0,0,0.3),
+                0 0 0 10px #1a1a2e;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 24px;
+            background: #1a1a2e;
+            border-radius: 16px;
+            z-index: 100;
+        }
+
+        .app-content {
+            height: 100%;
+            overflow-y: auto;
+            background: #f8f9fc;
+        }
+
+        .app-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #5B6BE6 0%, #7B5CD6 100%);
+            padding: 50px 18px 20px;
+            color: white;
+        }
+
+        .app-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .app-logo {
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .app-logo-icon {
+            width: 26px;
+            height: 26px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .app-profile-pic {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .app-greeting {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+
+        .app-church-name {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .app-quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 16px 18px;
+            margin-top: -24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .app-action-btn {
+            flex: 1;
+            background: white;
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .app-action-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .app-action-btn.offer .app-action-icon {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .app-action-btn.request .app-action-icon {
+            background: linear-gradient(135deg, #FF9800 0%, #f57c00 100%);
+        }
+
+        .app-action-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .app-section {
+            padding: 0 18px 16px;
+        }
+
+        .app-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .app-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .app-see-all {
+            font-size: 11px;
+            color: #5B6BE6;
+            font-weight: 600;
+        }
+
+        .app-ride-card {
+            background: white;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .app-ride-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .app-driver-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e5ec 0%, #c9ced6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .app-driver-info {
+            flex: 1;
+        }
+
+        .app-driver-name {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 13px;
+        }
+
+        .app-ride-type {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .app-seats-badge {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .app-ride-details {
+            display: flex;
+            gap: 16px;
+        }
+
+        .app-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .app-detail-icon {
+            font-size: 11px;
+        }
+
+        .app-detail-text {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .app-upcoming-event {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border-radius: 14px;
+            padding: 14px;
+            border-left: 3px solid #FFB800;
+        }
+
+        .app-event-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #b38600;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .app-event-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+
+        .app-event-time {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .app-event-rides {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 11px;
+            color: #5B6BE6;
+            font-weight: 600;
+        }
+
+        .app-bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px 18px 20px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+        }
+
+        .app-nav-item {
+            text-align: center;
+            color: #999;
+            font-size: 9px;
+        }
+
+        .app-nav-item.active {
+            color: #5B6BE6;
+        }
+
+        .app-nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #5B6BE6;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: clamp(24px, 4vw, 36px);
+            margin-bottom: 40px;
+            color: #1a1a2e;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 32px 24px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            text-align: left;
+        }
+
+        .problem-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .problem-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+
+        .problem-card p {
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* Solution Section */
+        .solution {
+            background: linear-gradient(180deg, #f0f2ff 0%, #f8f9fc 100%);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #5B6BE6 0%, #7B5CD6 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+
+        .feature h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 500px) {
+            .cta-form {
+                flex-direction: row;
+            }
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .cta-form input:focus {
+            border-color: #5B6BE6;
+        }
+
+        .cta-form button {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #5B6BE6 0%, #7B5CD6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .cta-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(91, 107, 230, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 24px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Hide mockup on very small screens */
+        @media (max-width: 899px) {
+            .phone-wrapper {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Mockup -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="logo">
+                    <span class="logo-icon">🚗</span>
+                    ChurchCarpool
+                </div>
+                <h1>Ride coordination<br>for your church family</h1>
+                <p class="subtitle">Help members get to service, youth group, and events — without the Sunday morning chaos of texts and phone calls.</p>
+                
+                <form class="signup-form" action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse" method="POST">
+                    <input type="email" name="entry.YOUR_EMAIL_FIELD" placeholder="Enter your email" required>
+                    <button type="submit">Get Early Access</button>
+                </form>
+                <p class="form-note">Join the waitlist. We'll notify you when we launch.</p>
+            </div>
+
+            <!-- Phone Mockup -->
+            <div class="phone-wrapper">
+                <div class="phone-frame">
+                    <div class="app-content">
+                        <div class="app-header">
+                            <div class="app-header-top">
+                                <div class="app-logo">
+                                    <div class="app-logo-icon">🚗</div>
+                                    ChurchCarpool
+                                </div>
+                                <div class="app-profile-pic"></div>
+                            </div>
+                            <div class="app-greeting">Welcome back,</div>
+                            <div class="app-church-name">Grace Community Church</div>
+                        </div>
+
+                        <div class="app-quick-actions">
+                            <div class="app-action-btn offer">
+                                <div class="app-action-icon">🚙</div>
+                                <div class="app-action-label">Offer a Ride</div>
+                            </div>
+                            <div class="app-action-btn request">
+                                <div class="app-action-icon">🙋</div>
+                                <div class="app-action-label">Request Ride</div>
+                            </div>
+                        </div>
+
+                        <div class="app-section">
+                            <div class="app-section-header">
+                                <div class="app-section-title">Available Rides</div>
+                                <div class="app-see-all">See All</div>
+                            </div>
+
+                            <div class="app-ride-card">
+                                <div class="app-ride-header">
+                                    <div class="app-driver-avatar">MK</div>
+                                    <div class="app-driver-info">
+                                        <div class="app-driver-name">Michael K.</div>
+                                        <div class="app-ride-type">Sunday Service • 10:30 AM</div>
+                                    </div>
+                                    <div class="app-seats-badge">3 seats</div>
+                                </div>
+                                <div class="app-ride-details">
+                                    <div class="app-detail-item">
+                                        <span class="app-detail-icon">📍</span>
+                                        <span class="app-detail-text">Erin Mills</span>
+                                    </div>
+                                    <div class="app-detail-item">
+                                        <span class="app-detail-icon">🕐</span>
+                                        <span class="app-detail-text">Pickup 9:45 AM</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="app-ride-card">
+                                <div class="app-ride-header">
+                                    <div class="app-driver-avatar">SL</div>
+                                    <div class="app-driver-info">
+                                        <div class="app-driver-name">Sarah L.</div>
+                                        <div class="app-ride-type">Youth Group • Friday</div>
+                                    </div>
+                                    <div class="app-seats-badge">2 seats</div>
+                                </div>
+                                <div class="app-ride-details">
+                                    <div class="app-detail-item">
+                                        <span class="app-detail-icon">📍</span>
+                                        <span class="app-detail-text">Meadowvale</span>
+                                    </div>
+                                    <div class="app-detail-item">
+                                        <span class="app-detail-icon">🕐</span>
+                                        <span class="app-detail-text">Pickup 6:30 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="app-section" style="padding-bottom: 80px;">
+                            <div class="app-section-header">
+                                <div class="app-section-title">Upcoming Event</div>
+                            </div>
+                            <div class="app-upcoming-event">
+                                <div class="app-event-label">This Sunday</div>
+                                <div class="app-event-title">Easter Service</div>
+                                <div class="app-event-time">April 20 • 9:00 AM & 11:00 AM</div>
+                                <div class="app-event-rides">🚗 12 rides offered • 4 requests</div>
+                            </div>
+                        </div>
+
+                        <div class="app-bottom-nav">
+                            <div class="app-nav-item active">
+                                <div class="app-nav-icon">🏠</div>
+                                Home
+                            </div>
+                            <div class="app-nav-item">
+                                <div class="app-nav-icon">🚗</div>
+                                Rides
+                            </div>
+                            <div class="app-nav-item">
+                                <div class="app-nav-icon">📅</div>
+                                Events
+                            </div>
+                            <div class="app-nav-item">
+                                <div class="app-nav-icon">💬</div>
+                                Chat
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <p class="section-label">The Problem</p>
+            <h2>Getting to church shouldn't be this hard</h2>
+            
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">👵</div>
+                    <h3>Seniors without rides</h3>
+                    <p>Elderly members who can't drive miss services and feel disconnected from the community.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">👨‍👩‍👧</div>
+                    <h3>Parents juggling pickups</h3>
+                    <p>Youth group nights turn into logistical nightmares with last-minute texts and calls.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📱</div>
+                    <h3>No central coordination</h3>
+                    <p>Ride requests get lost in group chats, bulletin announcements, and sticky notes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution">
+        <div class="container">
+            <p class="section-label">The Solution</p>
+            <h2>One app for all your church rides</h2>
+            
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">📋</div>
+                    <h3>Offer & Request</h3>
+                    <p>Members post available seats or request rides for any church event.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Smart Matching</h3>
+                    <p>Get notified when a ride matches your area and schedule.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📅</div>
+                    <h3>Event Integration</h3>
+                    <p>Syncs with Planning Center so rides appear for every event automatically.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Be the first to know</h2>
+            <p>We're launching soon. Join the waitlist to get early access.</p>
+            
+            <form class="cta-form" action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse" method="POST">
+                <input type="email" name="entry.YOUR_EMAIL_FIELD" placeholder="Enter your email" required>
+                <button type="submit">Join Waitlist</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 ChurchCarpool · Built with ❤️ for churches</p>
+    </footer>
+</body>
+</html>
